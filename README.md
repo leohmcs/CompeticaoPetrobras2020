@@ -17,13 +17,24 @@ Apos isso a simulação deve iniciar, com o drone na origem.
 - Sensores não disponiveis:
 
   --enable-magnetic-gripper
+  
   --enable-mobius-camera-back-left
+  
   --enable-mobius-camera-back-right
+  
   --enable-ouster
+  
   --enable-pendulum
+  
   --enable-realsense-top
+  
   --enable-teraranger
+  
   --enable-uv-camera
+  
   --enable-uv-leds
+  
   --enable-uv-leds-beacon
+  
   --enable-whycon-box
+  

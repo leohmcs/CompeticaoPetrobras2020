@@ -165,14 +165,14 @@
       <include>
         <uri>model://equipmentC</uri>
           <!-- Pose ( x y z r p y ) -->
-        <pose frame=''>1 1 0.6 0 -0 0</pose>
+        <pose frame=''>2 2 0.6 0 -0 0</pose>
       </include>
 
     <!-- THE EQUIPMENT D MODEL -->
       <include>
         <uri>model://equipmentD</uri>
           <!-- Pose ( x y z r p y ) -->
-        <pose frame=''>5 2 1.67 0 -0 0</pose>
+        <pose frame=''>5.0 2.08 1.67 0 -0 0</pose>
       </include>
 
     <!-- THE EQUIPMENT E MODEL -->

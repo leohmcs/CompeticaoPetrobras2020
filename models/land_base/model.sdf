@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <sdf version='1.6'>
   <model name='land_base'>
-    <link name='link_0'>
+    <link name='link_E'>
       <inertial>
         <mass>1</mass>
         <inertia>

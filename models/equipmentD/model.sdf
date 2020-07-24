@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <sdf version='1.6'>
   <model name='equipmentD'>
-    <link name='link_0'>
+    <link name='link_D'>
       <inertial>
         <mass>0.1</mass>
         <inertia>
@@ -28,12 +28,11 @@
       <collision name='collision'>
         <laser_retro>0</laser_retro>
         <max_contacts>10</max_contacts>
-        <pose frame=''>0 0 0 0 -0 0</pose>
+        <pose frame=''>0 0 0.05 0 -0 0</pose>
         <geometry>
-          <mesh>
-            <uri>model://equipmentD/meshes/equipment_D.obj</uri>
-            <scale>1 1 1</scale>
-          </mesh>
+          <box>
+            <size>0.1 0.1 0.1</size>
+          </box>
         </geometry>
         <surface>
           <friction>

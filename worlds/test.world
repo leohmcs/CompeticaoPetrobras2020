@@ -104,6 +104,13 @@
     </model>
     <!--}-->
 
+      <!-- THE ARENA MODEL -->
+      <include>
+        <uri>model://arena_spawn</uri>
+        <!-- Pose ( x y z r p y ) -->
+        <pose frame=''>1 1 0.0005 0 -0 0</pose>
+      </include>
+
     <!-- THE EQUIPMENT A MODEL -->
       <include>
         <uri>model://equipmentA</uri>
@@ -117,6 +124,13 @@
           <!-- Pose ( x y z r p y ) -->
         <pose frame=''>0.25 0.25 0.6 0 -0 0</pose>
       </include>
+    
+    <!-- THE TEST MODEL -->
+    <include>
+      <uri>model://unit_box</uri>
+         <!-- Pose ( x y z r p y ) -->
+      <pose frame=''>1 1 0.6 0 -0 0</pose>
+    </include>
     
     <!-- THE VOID (for spawning objects out of camera view) {-->
     <model name='the_void'>

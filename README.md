@@ -14,16 +14,27 @@ Instruções de instalação:
 
 Apos isso a simulação deve iniciar, com o drone na origem.
 - Para alterar a posição de spawn do drone acesse o arquivo uav1_pos.txt na pasta start
+- Na fase 4 é sugerido que para o levantamento das caixas utilizem o plugin gazebo_ros_link, instruções de como usar no git: https://github.com/pal-robotics/gazebo_ros_link_attacher
 - Sensores não disponiveis:
 
   --enable-magnetic-gripper
+
   --enable-mobius-camera-back-left
+
   --enable-mobius-camera-back-right
+
   --enable-ouster
+
   --enable-pendulum
+
   --enable-realsense-top
+
   --enable-teraranger
+
   --enable-uv-camera
+
   --enable-uv-leds
+
   --enable-uv-leds-beacon
+
   --enable-whycon-box

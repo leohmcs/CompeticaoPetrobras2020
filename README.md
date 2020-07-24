@@ -38,3 +38,4 @@ Apos isso a simulação deve iniciar, com o drone na origem.
   --enable-uv-leds-beacon
 
   --enable-whycon-box
+  

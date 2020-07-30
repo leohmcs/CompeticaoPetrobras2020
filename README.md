@@ -1,6 +1,6 @@
 Instruções de instalação:
   - Siga o processo de instalação do https://github.com/ctu-mrs/mrs_uav_system ( Na aba de Installation );
-  - No diretório do mrs_workspace/src;
+  - No diretório do home/workspace/src;
   - Faça o git clone desse pacote;
   - Execute um catkin build  
   - Siga as instruções do video para configurar as fases:

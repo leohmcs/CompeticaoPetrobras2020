@@ -30,7 +30,7 @@ input=(
 "
   'Gazebo' "waitForRos; roslaunch petrobras_challenge simulation_arena.launch gui:=true
 "
-  'Spawn' "waitForSimulation; spawn_uav 1 --file uav1_pos.txt --f450 --run --delete --enable-rangefinder --enable-rangefinder-up --enable-rplidar --enable-ground-truth --enable-bluefox-camera --enable-realsense-front
+  'Spawn' "waitForSimulation; spawn_uav 1 --file uav1_pos.yaml --f450 --run --delete --enable-rangefinder --enable-rangefinder-up --enable-rplidar --enable-ground-truth --enable-bluefox-camera --enable-realsense-front
 "
   'Control' "waitForOdometry; roslaunch mrs_uav_general core.launch config_uav_manager:=./custom_configs/uav_manager.yaml
 "

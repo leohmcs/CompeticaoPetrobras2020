@@ -1,7 +1,7 @@
 ---------------------------------------------- AVISO ------------------------------------------------------
 
 O atual pacote disponível no git do mrs esta com um bug, esse bug é causado na compilação do pacote px4. 
-Caso alguém atualize o sistema ou tente instalar por agora, possivelmente vai ocorrer esse erro. 
+Caso atualize o sistema ou tente instalar por agora (22/10/2020), possivelmente vai ocorrer esse erro. 
 A solução pra isso é a que segue abaixo, a equipe da mrs ja foi informada sobre o bug e deve esta reparando 
 assim que for possível.
 

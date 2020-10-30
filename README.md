@@ -1,16 +1,3 @@
----------------------------------------------- AVISO ------------------------------------------------------
-
-O atual pacote disponível no git do mrs esta com um bug, esse bug é causado na compilação do pacote px4. 
-Caso atualize o sistema ou tente instalar por agora (22/10/2020), possivelmente vai ocorrer esse erro. 
-A solução pra isso é a que segue abaixo, a equipe da mrs ja foi informada sobre o bug e deve esta reparando 
-assim que for possível.
-
-Link da solução: https://pastebin.com/raw/YP4sTJD1
-
-------------------//-----------------------------------------------------------------//---------------------
-
-
-
 Instruções de instalação:
   - Siga o processo de instalação do https://github.com/ctu-mrs/mrs_uav_system ( Na aba de Installation );
   - No diretório do home/workspace/src;

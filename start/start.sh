@@ -32,7 +32,7 @@ input=(
 "
   'PrepSpawn' "waitForSimulation; roslaunch mrs_simulation mrs_drone_spawner.launch
 "
-  'Spawn' "waitForSimulation; bash spawn.sh 
+  'Spawn' "waitForSimulation; while [[ true ]]; do echo \"waiting for mrs_drone_spawner\"; if rosnode list | grep -q \"mrs_drone_spawner\"; then rosservice call /mrs_drone_spawner/spawn \"1 --f450 --enable-rangefinder --enable-rangefinder-up --enable-rplidar --enable-ground-truth --enable-bluefox-camera --enable-realsense-front --pos 8.1 2.0 1.0 3.14\"; break; fi; done; exit 0 
 "
   'Control' "waitForOdometry; roslaunch mrs_uav_general core.launch config_uav_manager:=./custom_configs/uav_manager.yaml
 "

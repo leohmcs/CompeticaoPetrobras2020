@@ -20,13 +20,15 @@ PROJECT_NAME=fase1_sprogram
 MAIN_DIR=~/"bag_files"
 
 # following commands will be executed first, in each window
-pre_input="export UAV_NAME=uav1; export UAV_TYPE=f450; export WORLD_FILE=./world.yaml; export PX4_SIM_SPEED_FACTOR=1.0"
+pre_input="export UAV_NAME=uav1; export UAV_TYPE=f450; export WORLD_FILE=./world.yaml; export PX4_SIM_SPEED_FACTOR=1.0; export RUN_TYPE=simulation; export ODOMETRY_TYPE=hector"
 
 # define commands
 # 'name' 'command'
 # DO NOT PUT spaces in the names
 input=(
   'Roscore' "roscore
+"
+  'Hector' "waitForSimulation; roslaunch mrs_uav_general hector_slam.launch
 "
   'Gazebo' "waitForRos; roslaunch petrobras_challenge simulation_arena.launch gui:=true
 "
@@ -38,7 +40,7 @@ input=(
 "
   'AutomaticStart' "waitForSimulation; roslaunch mrs_uav_general automatic_start.launch
 "
-  "PrepareUAV" "waitForControl; rosservice call /$UAV_NAME/mavros/cmd/arming 1; rosservice call /$UAV_NAME/mavros/set_mode 0 offboard; rosservice call /uav1/control_manager/use_safety_area \"data: false\"; rosservice call /uav1/control_manager/set_min_height \"value: 0.0\"
+   "PrepareUAV" "waitForControl; rosservice call /uav1/control_manager/use_safety_area \"data: false\"; rosservice call /$UAV_NAME/mavros/cmd/arming 1; rosservice call /$UAV_NAME/mavros/set_mode 0 offboard; rosservice call /uav1/control_manager/set_min_height \"value: 0.0\"
 "
   'Camera_follow' "waitForOdometry; gz camera -c gzclient_camera -f $UAV_NAME"
   'gazebo_camera_follow' "waitForOdometry; gz camera -c gzclient_camera -f $UAV_NAME; history -s gz camera -c gzclient_camera -f $UAV_NAME"

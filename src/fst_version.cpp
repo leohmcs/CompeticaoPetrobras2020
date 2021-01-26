@@ -4,7 +4,6 @@
 #include "mrs_msgs/PositionCommand.h"
 #include "std_msgs/Header.h"
 #include "geometry_msgs/Point.h"
-#include "geometry_msgs/Quaternion.h"
 
 /*Vou usar variavel global por um momento soh pra testar o subscriber, depois
  *vejo como usar referencia no lugar delas*/

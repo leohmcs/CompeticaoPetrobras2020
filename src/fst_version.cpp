@@ -5,10 +5,12 @@
 #include "geometry_msgs/Point.h"
 #include "geometry_msgs/Quaternion.h"
 
+
 int main(int argc, char **argv){
 	
 	ros::init(argc, argv, "goto");
 	ros::NodeHandle n;
+  n = ros::NodeHandle("~");
 
   /* PUBLISHER */
   /*O topico a seguir eh onde vamos publicar o destino que queremos que o drone chegue,
@@ -27,8 +29,8 @@ int main(int argc, char **argv){
   header_mensagem.frame_id = "uav1/hector_origin"; 
   
   //Posicao que vai ser fornecida como destino do drone
-  reference_mensagem.position.x = -2.0;
-  reference_mensagem.position.y = 2.0;
+  reference_mensagem.position.x = 5.0;
+  reference_mensagem.position.y = -5.0;
   reference_mensagem.position.z = 2.0;
 
   //Passa o que foi modificado pra 'mensagem'

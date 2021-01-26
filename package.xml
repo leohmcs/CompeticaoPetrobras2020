@@ -11,16 +11,21 @@
   <author email="jorge.luiz.henri@hotmail.com">Jorge Luiz Henriques</author>
 
   <buildtool_depend>catkin</buildtool_depend>
+
   <build_depend>rospy</build_depend>
   <!-- PG: Eu que adicionei isso aqui (build e run depends, com o nome das dependencias que utilizo em fst_version.cpp-->
   <build_depend>roscpp</build_depend>
   <build_depend>mrs_msgs</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>geometry_msgs</build_depend>
+  <build_depend>gazebo_ros_link_attacher</build_depend>
+  
+  <exec_depend>rospy</exec_depend>
   <exec_depend>roscpp</exec_depend>	
   <exec_depend>mrs_msgs</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>gazebo_ros_link_attacher</exec_depend>
 
   <depend>gazebo</depend>
   <depend>gazebo_ros</depend>

@@ -11,8 +11,9 @@ find_package(catkin REQUIRED COMPONENTS
   gazebo_ros
   geometry_msgs
   mrs_msgs
-  std_msgs
   roscpp
+  std_msgs
+  gazebo_ros_link_attacher
   )
 
 ## PG: Coloquei no CATKIN_DEPENDS o nome das bibliotecas novamente
@@ -21,8 +22,9 @@ catkin_package(
     roscpp 
     mrs_msgs 
     geometry_msgs 
-    std_msgs
     gazebo_ros
+    std_msgs
+    gazebo_ros_link_attacher
   )
 
 ## PG

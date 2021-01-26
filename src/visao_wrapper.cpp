@@ -4,10 +4,13 @@
 #include "sensor_msgs/Image.h"
 #include "std_msgs/String.h"
 
+#include "opencv2/core.hpp"
+#include "opencv2/imgcodecs.hpp"
+#include "opencv2/highgui.hpp"
+
 // #include "qrcode_reader.cpp"
 
 using namespace std;
-
 
 class CodeReader {
 private:
@@ -17,8 +20,18 @@ public:
     CodeReader();
 
     void imageCallback(const sensor_msgs::Image::ConstPtr& msg) {
-        vector<uint8_t> img = msg->data;
-        // string res = read_qrcode(img); -> read_qrcode sera criado no outro arquivo da visao
+        unsigned int r = msg->height, c = msg->width;
+        vector<uint8_t> imgV = msg->data;
+
+        if (imgV.size() == r*c) {  // garantir que o tamanho da imagem está certo
+            cv::Mat img = cv::Mat(r, c, CV_8UC1);
+            memcpy(img.data, imgV.data(), imgV.size()*sizeof(uchar));
+
+            cv::imshow("UAV Camera", img);
+            cv::waitKey(10);
+        }
+
+        // string res = read_qrcode(imgV); -> read_qrcode sera criado no outro arquivo da visao
         // pubRes(res);
     }
 

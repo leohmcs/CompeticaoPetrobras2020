@@ -18,6 +18,11 @@ private:
 
 public:
     void imageCallback(const sensor_msgs::Image::ConstPtr& msg) {
+        /**
+         * #########################################################################
+         * ## FALTA CONVERTER OS DADOS DE IMAGE RAW PARA ALGO LEGÍVEL PELO OPENCV ##
+         * #########################################################################
+         **/
         unsigned int r = msg->height, c = msg->width;
         vector<uint8_t> imgV = msg->data;
 
@@ -28,17 +33,6 @@ public:
             cv::imshow("UAV Camera", img);
             cv::waitKey(50);
         }
-
-        // for( int i = 0; i < r*c; i++) {
-            // imgV.push_back(i % r);
-        // }
-
-        // cv::Mat img = cv::Mat(imgV).reshape(0, r);
-
-        // img.convertTo(img, CV_8UC1);
-
-        // cv::imshow("UAV Camera", img);
-        // cv::waitKey(50);
 
         // string res = read_qrcode(imgV); -> read_qrcode sera criado no outro arquivo da visao
         // pubResult(res);

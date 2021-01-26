@@ -78,6 +78,11 @@ public:
     }
 
     void attach(ros::NodeHandle& n, std::string model2) {
+        /**
+         * #####################
+         * ## ESTÁ DANDO ERRO ##
+         * #####################
+         **/
         ros::ServiceClient attachClient = n.serviceClient<gazebo_ros_link_attacher::Attach>("/link_attacher_node/attach");
         gazebo_ros_link_attacher::Attach srv;
         
@@ -109,6 +114,12 @@ int main(int argc, char **argv){
     Control control;
     ros::Subscriber sub = n.subscribe("uav1/control_manager/position_cmd", 1000, &Control::positionCallback, &control);
     // geometry_msgs::Point pos = POSICAO; // Novamente, tem como  melhorar isso aq dms
+
+    /**
+     * #######################################################################
+     * ## DAQUI PRA BAIXO É SÓ PARA TESTE; NÃO DEVE EXISTIR NO CÓDIGO FINAL ##
+     * #######################################################################
+     **/
 
     //Ponto de destino
     geometry_msgs::Point p;

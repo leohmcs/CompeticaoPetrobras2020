@@ -36,3 +36,7 @@ include_directories(
 add_executable(fst_version src/fst_version.cpp)
 target_link_libraries(fst_version ${catkin_LIBRARIES})
 ## add_dependencies(fst_version petrobras_challenge_generate_messages_cpp)
+
+add_executable(teste_goto src/teste_goto.cpp)
+target_link_libraries(teste_goto ${catkin_LIBRARIES})
+

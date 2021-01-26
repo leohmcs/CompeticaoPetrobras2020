@@ -1,9 +1,18 @@
 #include "ros/ros.h"
 #include "mrs_msgs/ReferenceStamped.h"
 #include "mrs_msgs/Reference.h"
+#include "mrs_msgs/PositionCommand.h"
 #include "std_msgs/Header.h"
 #include "geometry_msgs/Point.h"
-#include "geometry_msgs/Quaternion.h"
+
+/*Vou usar variavel global por um momento soh pra testar o subscriber, depois
+ *vejo como usar referencia no lugar delas*/
+
+geometry_msgs::Point pos;
+
+void positionCallback(const mrs_msgs::PositionCommand::ConstPtr& msg){
+  pos = msg->position;
+}
 
 
 int main(int argc, char **argv){
@@ -12,13 +21,17 @@ int main(int argc, char **argv){
 	ros::NodeHandle n;
   n = ros::NodeHandle("~");
 
+  /* SUBSCRIBER */
+  /*O topico a seguir eh de onde vamos ler a informacao da posicao do drone segundo o frame_id 
+   *do Hector.*/
+  ros::Subscriber sub = n.subscribe("uav1/control_manager/position_cmd", 1000, positionCallback);
+
   /* PUBLISHER */
   /*O topico a seguir eh onde vamos publicar o destino que queremos que o drone chegue,
    *atraves de um ReferenceStamped, que eh o tipo de msg suportado por esse topico, que 
    *contem um Header e um Reference.*/
   ros::Publisher pub = n.advertise<mrs_msgs::ReferenceStamped>("/uav1/control_manager/reference", 100);
   ros::Rate loopRate(10); //10 Hz
-  
 
   mrs_msgs::ReferenceStamped mensagem; //Var que guarda a info que vai ser publicada no topico, componentes dela abaixo
   
@@ -41,11 +54,14 @@ int main(int argc, char **argv){
   while(ros::ok()){
 
     pub.publish(mensagem); //Publica
-    
+
+    ROS_INFO("I heard:\n position.x = [%f]\n position.y = [%f]\n position.z = [%f]", pos.x, pos.y, pos.z);
+
     ros::spinOnce();
     loopRate.sleep(); //Define a freq de publicacao
   }
 
+  return 0;
 }
 
 
@@ -62,7 +78,7 @@ mrs_msgs/Reference reference
   float64 heading*/
 
  /*PositionCommand:
-  std_msgs/Header header
+std_msgs/Header header
   uint32 seq
   time stamp
   string frame_id

@@ -17,8 +17,6 @@ private:
     ros::Publisher resPub;
 
 public:
-    CodeReader();
-
     void imageCallback(const sensor_msgs::Image::ConstPtr& msg) {
         unsigned int r = msg->height, c = msg->width;
         vector<uint8_t> imgV = msg->data;
@@ -28,46 +26,68 @@ public:
             memcpy(img.data, imgV.data(), imgV.size()*sizeof(uchar));
 
             cv::imshow("UAV Camera", img);
-            cv::waitKey(10);
+            cv::waitKey(50);
         }
 
+        // for( int i = 0; i < r*c; i++) {
+            // imgV.push_back(i % r);
+        // }
+
+        // cv::Mat img = cv::Mat(imgV).reshape(0, r);
+
+        // img.convertTo(img, CV_8UC1);
+
+        // cv::imshow("UAV Camera", img);
+        // cv::waitKey(50);
+
         // string res = read_qrcode(imgV); -> read_qrcode sera criado no outro arquivo da visao
-        // pubRes(res);
+        // pubResult(res);
     }
 
-    void initPub(ros::NodeHandle& n) {
+    /* 
+    * Cria o topico no qual e publicado o resultado da leitura do qr code para o controle ler
+    */
+    void initPublisher(ros::NodeHandle& n) {
         resPub = n.advertise<std_msgs::String>("qrcode_reader", 1000);
     }
 
-    void pubRes(string res) {
+    /**
+     * Publica o resultado da leitura do qrcode 
+     **/
+    void pubResult(string res) {
         std_msgs::String resMsg;
         resMsg.data = res;
         resPub.publish(resMsg);
 
-        std::stringstream ss;
-        ss << "Resultado da leitura: " << res;
-        ROS_INFO("%s", resMsg.data.c_str());
+        ROS_INFO("Resultado da leitura: %s", resMsg.data.c_str());
     }
+
+    CodeReader() {
+        // apenas exista
+    }
+
+    ~CodeReader() {
+        ros::shutdown();
+    }
+
 };
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     /* Define o no como "qrcode_reader" e o NodeHandle */
     ros::init(argc, argv, "qrcode_reader");
-    ros::NodeHandle n;
+    ros::NodeHandle n; 
+    n = ros::NodeHandle("~");
 
     CodeReader codeReader;
 
-    /* 
-     * Cria o topico no qual e publicado o resultado da leitura do qr code para o controle ler
-     */ 
+    codeReader.initPublisher(n);
 
-    codeReader.initPub(n);
-
-    /*
+    /**
      * Se inscreve no topico que o drone publica as imagens capturadas pela camera
      * para enviar para imageCallback, que fara a leitura do qrcode
-     */ 
+     **/ 
     ros::Subscriber img_sub = n.subscribe("/uav1/bluefox_optflow/image_raw", 1000, &CodeReader::imageCallback, &codeReader);
+
     ros::spin();
 
     return 0;

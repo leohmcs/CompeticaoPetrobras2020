@@ -7,6 +7,7 @@ project(petrobras_challenge)
 
 ## PG: Tudo que for escrito abaixo eh pra tentar compilar certinho o file cpp, soh o gazebo_ros q era default
 ## PG: Adicionei os nomes das biliotecas que usei no fst_version.cpp
+find_package(OpenCV REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
   gazebo_ros
   geometry_msgs
@@ -40,3 +41,5 @@ target_link_libraries(fst_version ${catkin_LIBRARIES})
 add_executable(teste_goto src/teste_goto.cpp)
 target_link_libraries(teste_goto ${catkin_LIBRARIES})
 
+add_executable(visao_wrapper src/visao_wrapper.cpp)
+target_link_libraries(visao_wrapper ${catkin_LIBRARIES} ${OpenCV_LIBS})

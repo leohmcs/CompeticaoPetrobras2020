@@ -9,6 +9,7 @@ project(petrobras_challenge)
 ## PG: Adicionei os nomes das biliotecas que usei no fst_version.cpp
 find_package(OpenCV REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
+  cv_bridge
   gazebo_ros
   geometry_msgs
   mrs_msgs
@@ -26,6 +27,7 @@ catkin_package(
     gazebo_ros
     std_msgs
     gazebo_ros_link_attacher
+    cv_bridge
   )
 
 ## PG

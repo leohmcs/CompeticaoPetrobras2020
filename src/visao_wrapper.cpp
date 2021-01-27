@@ -3,6 +3,8 @@
 #include "ros/ros.h"
 #include "sensor_msgs/Image.h"
 #include "std_msgs/String.h"
+#include "cv_bridge/cv_bridge.h"
+#include "sensor_msgs/image_encodings.h"
 
 #include "opencv2/core.hpp"
 #include "opencv2/imgcodecs.hpp"
@@ -10,29 +12,48 @@
 
 // #include "qrcode_reader.cpp"
 
+
 using namespace std;
+
+namespace enc = sensor_msgs::image_encodings;
 
 class CodeReader {
 private:
     ros::Publisher resPub;
 
 public:
-    void imageCallback(const sensor_msgs::Image::ConstPtr& msg) {
+    void imageCallback(const sensor_msgs::ImageConstPtr& msg) {
         /**
          * #########################################################################
          * ## FALTA CONVERTER OS DADOS DE IMAGE RAW PARA ALGO LEGÍVEL PELO OPENCV ##
          * #########################################################################
          **/
-        unsigned int r = msg->height, c = msg->width;
-        vector<uint8_t> imgV = msg->data;
 
-        if (imgV.size() == r*c) {  // garantir que o tamanho da imagem está certo
+        /* Converter Image Raw para algo legível pelo OpenCV */
+        cv_bridge::CvImageConstPtr cv_ptr;
+        try {
+            if(enc::isColor(msg->encoding)) {
+                cv_ptr = cv_bridge::toCvShare(msg, enc::BGR8);
+
+            } else {
+                cv_ptr = cv_bridge::toCvShare(msg, enc::MONO8);
+
+            }
+        } catch (cv_bridge::Exception& e) {
+            ROS_ERROR("Erro ao converter imagem: %s", e.what());
+            return;
+        }
+        
+        cv::imshow("Drone image", cv_ptr->image);
+        cv::waitKey(50);
+
+        /*if (imgV.size() == r*c) {  // garantir que o tamanho da imagem está certo
             cv::Mat img = cv::Mat(r, c, CV_8UC1);
             memcpy(img.data, imgV.data(), imgV.size()*sizeof(uchar));
 
             cv::imshow("UAV Camera", img);
             cv::waitKey(50);
-        }
+        }*/
 
         // string res = read_qrcode(imgV); -> read_qrcode sera criado no outro arquivo da visao
         // pubResult(res);

@@ -9,6 +9,16 @@
 #include "geometry_msgs/Quaternion.h"
 #include "gazebo_ros_link_attacher/Attach.h"
 
+#define UAV_MODEL "uav1"
+#define MODEL_A "equipmentA"
+#define MODEL_B "equipmentB"
+#define MODEL_C "equipmentC"
+
+#define UAV_LINK "base_link"
+#define MODEL_A_LINK "link_A"
+#define MODEL_B_LINK "link_B"
+#define MODEL_C_LINK "link_C"
+
 
 class Control {
 private:
@@ -16,10 +26,13 @@ private:
     ros::Publisher positionPub;
 
 public:
-    /** Lista de posições das caixas
-     * A = [0]; B = [1]; C = [2]
+    /** Lista de posições das plataformas
+     * A = [0]; B = [1]; C = [2]; D = [3]; E = [4]
      **/
-    const double positions[3][3] = {{4.1, -2.1, 2.0}, {5.0, -1.0, 2.0}, {6.0, -0.5, 2.0}}; 
+
+    // TODO: adicionar as posicoes D e E 
+    const double positions[5][3] = {{4.1, -2.1, 2.0}, {5.0, -1.0, 2.0}, {6.0, -0.5, 2.0}, 
+    {0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}}; 
 
     Control() {
         // faça nada
@@ -77,19 +90,14 @@ public:
 
     }
 
-    void attach(ros::NodeHandle& n, std::string model2) {
-        /**
-         * #####################
-         * ## ESTÁ DANDO ERRO ##
-         * #####################
-         **/
+    int attach(ros::NodeHandle& n, std::string model2, std::string model2Link) {
         ros::ServiceClient attachClient = n.serviceClient<gazebo_ros_link_attacher::Attach>("/link_attacher_node/attach");
         gazebo_ros_link_attacher::Attach srv;
         
-        srv.request.model_name_1 = "uav1";
-        srv.request.link_name_1 = "link";
+        srv.request.model_name_1 = UAV_MODEL;
+        srv.request.link_name_1 = UAV_MODEL;
         srv.request.model_name_2 = model2;
-        srv.request.link_name_2 = "link";
+        srv.request.link_name_2 = model2Link;
 
         if(attachClient.call(srv)) {
             ROS_INFO("Attached UAV and equipment");
@@ -97,7 +105,31 @@ public:
             //vai pra caixa que o qrcode mandar
         } else {
             ROS_ERROR("Failed to attach UAV and equipment");
+            return 1;
         }
+
+        return 0;
+    }
+
+    int detach(ros::NodeHandle& n, std::string model2, std::string model2Link) {
+        ros::ServiceClient attachClient = n.serviceClient<gazebo_ros_link_attacher::Attach>("/link_attacher_node/detach");
+        gazebo_ros_link_attacher::Attach srv;
+        
+        srv.request.model_name_1 = "uav1";
+        srv.request.link_name_1 = "base_link";
+        srv.request.model_name_2 = model2;
+        srv.request.link_name_2 = model2Link;
+
+        if(attachClient.call(srv)) {
+            ROS_INFO("Detached UAV and equipment");
+
+            //vai pra caixa que o qrcode mandar
+        } else {
+            ROS_ERROR("Failed to detach UAV and equipment");
+            return 1;
+        }
+
+        return 0;
     }
 };
 
@@ -123,19 +155,22 @@ int main(int argc, char **argv){
 
     //Ponto de destino
     geometry_msgs::Point p;
-    p.x = control.positions[1][0];
-    p.y = control.positions[1][1];
-    p.z = control.positions[1][2];
+    p.x = control.positions[0][0];
+    p.y = control.positions[0][1];
+    p.z = control.positions[0][2];
 
     control.go_to(pub, p);
-    if (control.in_position(p))
+    if (control.in_position(p)) {
         p.z = 0.2;
         control.go_to(pub, p);
+    }
 
-    control.attach(n, "equipmentB");
+    control.attach(n, MODEL_A, MODEL_A_LINK);
 
     p.z = 2.0;
     control.go_to(pub, p);
+
+    control.detach(n, MODEL_A, MODEL_A_LINK);
 
     return 0;
 }

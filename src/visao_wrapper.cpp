@@ -23,12 +23,6 @@ private:
 
 public:
     void imageCallback(const sensor_msgs::ImageConstPtr& msg) {
-        /**
-         * #########################################################################
-         * ## FALTA CONVERTER OS DADOS DE IMAGE RAW PARA ALGO LEGÍVEL PELO OPENCV ##
-         * #########################################################################
-         **/
-
         /* Converter Image Raw para algo legível pelo OpenCV */
         cv_bridge::CvImageConstPtr cv_ptr;
         try {

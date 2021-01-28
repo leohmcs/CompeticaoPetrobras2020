@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="petrobras_challenge" name="goto" type="teste_goto" respawn="true"/>
+	<node pkg="petrobras_challenge" name="qrcode_reader" type="visao_wrapper" respawn="true" />
+</launch>

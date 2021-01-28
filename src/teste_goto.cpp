@@ -95,7 +95,7 @@ public:
         gazebo_ros_link_attacher::Attach srv;
         
         srv.request.model_name_1 = UAV_MODEL;
-        srv.request.link_name_1 = UAV_MODEL;
+        srv.request.link_name_1 = UAV_LINK;
         srv.request.model_name_2 = model2;
         srv.request.link_name_2 = model2Link;
 
@@ -115,8 +115,8 @@ public:
         ros::ServiceClient attachClient = n.serviceClient<gazebo_ros_link_attacher::Attach>("/link_attacher_node/detach");
         gazebo_ros_link_attacher::Attach srv;
         
-        srv.request.model_name_1 = "uav1";
-        srv.request.link_name_1 = "base_link";
+        srv.request.model_name_1 = UAV_MODEL;
+        srv.request.link_name_1 = UAV_LINK;
         srv.request.model_name_2 = model2;
         srv.request.link_name_2 = model2Link;
 
@@ -170,7 +170,9 @@ int main(int argc, char **argv){
     p.z = 2.0;
     control.go_to(pub, p);
 
-    control.detach(n, MODEL_A, MODEL_A_LINK);
+    if (control.in_position(p)) {
+        control.detach(n, MODEL_A, MODEL_A_LINK);
+    }
 
     return 0;
 }

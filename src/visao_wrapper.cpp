@@ -1,4 +1,5 @@
 #include <vector>
+#include <chrono>
 
 #include "ros/ros.h"
 #include "sensor_msgs/Image.h"
@@ -10,7 +11,7 @@
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
 
-// #include "qrcode_reader.cpp"
+#include "../include/qrcode_reader.h"
 
 
 using namespace std;
@@ -25,6 +26,8 @@ public:
     void imageCallback(const sensor_msgs::ImageConstPtr& msg) {
         /* Converter Image Raw para algo legível pelo OpenCV */
         cv_bridge::CvImageConstPtr cv_ptr;
+        cv::Mat img = cv_ptr->image;
+
         try {
             if(enc::isColor(msg->encoding)) {
                 cv_ptr = cv_bridge::toCvShare(msg, enc::BGR8);
@@ -37,20 +40,18 @@ public:
             ROS_ERROR("Erro ao converter imagem: %s", e.what());
             return;
         }
-        
-        cv::imshow("Drone image", cv_ptr->image);
+
+        string res = read_qrcode(img);
+        std::stringstream img_info;
+        img_info << "Resultado: " << res;
+
+        cv::putText(img, img_info.str(), cv::Point(10, 10), cv::FONT_HERSHEY_DUPLEX, 
+                    1.0, CV_RGB(0, 255, 0), 2.0);
+
+        cv::imshow("Drone image", img);
         cv::waitKey(50);
 
-        /*if (imgV.size() == r*c) {  // garantir que o tamanho da imagem está certo
-            cv::Mat img = cv::Mat(r, c, CV_8UC1);
-            memcpy(img.data, imgV.data(), imgV.size()*sizeof(uchar));
-
-            cv::imshow("UAV Camera", img);
-            cv::waitKey(50);
-        }*/
-
-        // string res = read_qrcode(imgV); -> read_qrcode sera criado no outro arquivo da visao
-        // pubResult(res);
+        pubResult(res);
     }
 
     /* 

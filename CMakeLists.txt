@@ -44,4 +44,5 @@ add_executable(teste_goto src/teste_goto.cpp)
 target_link_libraries(teste_goto ${catkin_LIBRARIES})
 
 add_executable(visao_wrapper src/visao_wrapper.cpp)
-target_link_libraries(visao_wrapper ${catkin_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(visao_wrapper ${catkin_LIBRARIES} ${OpenCV_LIBS} ${ZBAR_LIBRARIES})
+# add_library(visao_wrapper include/qrcode_reader.h)

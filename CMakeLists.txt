@@ -35,13 +35,13 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-## PG
-add_executable(fst_version src/fst_version.cpp)
-target_link_libraries(fst_version ${catkin_LIBRARIES})
+
+add_executable(fase4 src/fase4.cpp)
+target_link_libraries(fase4 ${catkin_LIBRARIES})
 ## add_dependencies(fst_version petrobras_challenge_generate_messages_cpp)
 
-add_executable(teste_goto src/teste_goto.cpp)
-target_link_libraries(teste_goto ${catkin_LIBRARIES})
+add_executable(goto src/goto.cpp)
+target_link_libraries(goto ${catkin_LIBRARIES})
 
 add_executable(visao_wrapper src/visao_wrapper.cpp)
 target_link_libraries(visao_wrapper ${catkin_LIBRARIES} ${OpenCV_LIBS} ${ZBAR_LIBRARIES})

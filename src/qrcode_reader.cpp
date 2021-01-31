@@ -1,13 +1,9 @@
-#include <opencv2/core/core.hpp> 
-#include <opencv2/highgui/highgui.hpp> 
-#include "opencv2/opencv.hpp"  
-#include <iostream>
-#include <string>
-#include "zbar.h"
+#include "../include/qrcode_reader.h"
 
 using namespace cv;
 using namespace std;
-using namespace zbar;  
+using namespace zbar;
+
 
 string read_qrcode(Mat img){	
 	string pos = "0";
@@ -29,9 +25,7 @@ string read_qrcode(Mat img){
 	int n = scanner.scan(image);
 
 	// Iterador para pecorrer todos os Qrcodes encontrado  
-	for(Image::SymbolIterator symbol = image.symbol_begin();  
-	symbol != image.symbol_end();  
-	++symbol) {
+	for(Image::SymbolIterator symbol = image.symbol_begin(); symbol != image.symbol_end(); ++symbol) {
 
  		pos = symbol->get_data();
 

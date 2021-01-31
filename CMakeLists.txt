@@ -38,11 +38,12 @@ include_directories(
 
 add_executable(fase4 src/fase4.cpp)
 target_link_libraries(fase4 ${catkin_LIBRARIES})
-## add_dependencies(fst_version petrobras_challenge_generate_messages_cpp)
+# add_dependencies(fase4 ${catkin_EXPORTED_TARGETS})
 
 add_executable(goto src/goto.cpp)
 target_link_libraries(goto ${catkin_LIBRARIES})
+# add_dependencies(goto ${catkin_EXPORTED_TARGETS})
 
 add_executable(visao_wrapper src/visao_wrapper.cpp)
-target_link_libraries(visao_wrapper ${catkin_LIBRARIES} ${OpenCV_LIBS} ${ZBAR_LIBRARIES})
-# add_library(visao_wrapper include/qrcode_reader.h)
+target_link_libraries(visao_wrapper ${catkin_LIBRARIES} ${OpenCV_LIBS} ${ZBAR_LIBRARIES} zbar)
+# add_dependencies(visao_wrapper ${catkin_EXPORTED_TARGETS})

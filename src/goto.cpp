@@ -1,11 +1,14 @@
 #include <cmath>
 
 #include "ros/ros.h"
+
 #include "mrs_msgs/ReferenceStamped.h"
 #include "mrs_msgs/Reference.h"
 #include "mrs_msgs/PositionCommand.h"
+
 #include "std_msgs/Header.h"
 #include "std_msgs/String.h"
+
 #include "geometry_msgs/Point.h"
 #include "geometry_msgs/Quaternion.h"
 
@@ -26,7 +29,7 @@ public:
         gotoPub = n.advertise<mrs_msgs::ReferenceStamped>("/uav1/control_manager/reference", 100);
 
         subPos = n.subscribe("uav1/control_manager/position_cmd", 1000, &GoTo::position_callback, this);
-        subPoint = n.subscribe("goto", 1000, &GoTo::next_point, this);
+        subPoint = n.subscribe("/goto_point", 1000, &GoTo::next_point, this);
 
     }
 
@@ -36,7 +39,6 @@ public:
     
     void position_callback(const mrs_msgs::PositionCommand::ConstPtr& msg){
         posicao = msg->position;
-        // ROS_INFO("Posicao atual: [%f, %f, %f]", posicao.x, posicao.y, posicao.z);
     }
 
     //Verifica se o drone ja esta na posicao desejada
@@ -84,12 +86,12 @@ public:
         }
     }
 
-    void next_point(geometry_msgs::Point::ConstPtr& destino) {
+    void next_point(const geometry_msgs::Point::ConstPtr& destino) {
         geometry_msgs::Point intermediate;
         ROS_INFO("Comparando %f e %f", posicao.z, destino->z);
         if(posicao.z < destino->z) {
             /* O destino está mais alto, então deve subir antes */
-            ROS_INFO("Subindo primeiro: [z atual: %f z do destino%f]\n", posicao.z, destino->z);
+            // ROS_INFO("Subindo primeiro: [z atual: %f z do destino%f]\n", posicao.z, destino->z);
             intermediate.x = posicao.x;
             intermediate.y = posicao.y;
             intermediate.z = destino->z;
@@ -98,7 +100,7 @@ public:
              * O destino está mais baixo ou na mesma altura, 
              * então deve voar horizontalmente antes 
              **/
-            ROS_INFO("Horizontal primeiro: [z atual: %f z do destino%f]\n", posicao.z, destino->z);
+            // ROS_INFO("Horizontal primeiro: [z atual: %f z do destino%f]\n", posicao.z, destino->z);
             intermediate.x = destino->x;
             intermediate.y = destino->y;
             intermediate.z = posicao.z;

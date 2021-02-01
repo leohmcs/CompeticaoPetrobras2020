@@ -26,16 +26,12 @@ string read_qrcode(Mat img){
 
 	// Iterador para pecorrer todos os Qrcodes encontrado  
 	for(Image::SymbolIterator symbol = image.symbol_begin(); symbol != image.symbol_end(); ++symbol) {
-
  		pos = symbol->get_data();
 
 	}  
   
- 
 	image.set_data(NULL, 0);
 	   
-
 	return pos;
-
 }
   

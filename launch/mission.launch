@@ -1,5 +1,5 @@
 <launch>
-	<node pkg="petrobras_challenge" name="fase4" type="fase4" respawn="true" />
-	<node pkg="petrobras_challenge" name="goto" type="goto" respawn="true"/>
-	<node pkg="petrobras_challenge" name="qrcode_reader" type="visao_wrapper" respawn="true" />
+	<node pkg="petrobras_challenge" name="fase4" type="fase4" output="screen" required="true"/>
+	<node pkg="petrobras_challenge" name="goto" type="goto" output="screen" respawn="true"/>
+	<node pkg="petrobras_challenge" name="qrcode_reader" type="visao_wrapper" output="screen" respawn="true"/>
 </launch>

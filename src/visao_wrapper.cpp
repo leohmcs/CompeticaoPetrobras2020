@@ -37,39 +37,52 @@ private:
 
     ros::Subscriber imgSub;
 
+    std_msgs::String resMsg;
+
 public:
     // Futuramente, mover essa função para qrcode_reader.cpp e apenas importar
-    string read_qrcode(Mat img){	
+    string read_qrcode(Mat imgOriginal){
+        cv::Mat img;
+        cvtColor(imgOriginal, img, CV_BGR2GRAY);
+
+        auto start = std::chrono::system_clock::now();
+
         string pos = "0";
         ImageScanner scanner;
-        Mat imgout;
-
+        
+        // try {
         // Configura o zbar
         scanner.set_config(ZBAR_NONE, ZBAR_CFG_ENABLE, 1);     
         
-        cvtColor(img, imgout, CV_RGB2BGR);  
-        int width = imgout.cols;  
-        int height = imgout.rows;  
-        uchar *raw = (uchar *)imgout.data;  
+        int width = img.cols;  
+        int height = img.rows;  
+        uchar *raw = (uchar *)img.data;  
         
         // Transforma a imagem para o tipo de entrada do scan
         Image image(width, height, "Y800", raw, width * height);  
 
-        // Procura os Qrcode na imagem  
-        int n = scanner.scan(image);
-
-        // Iterador para pecorrer todos os Qrcodes encontrado  
-        for(Image::SymbolIterator symbol = image.symbol_begin(); symbol != image.symbol_end(); ++symbol) {
-
-            pos = symbol->get_data();
-
-            ROS_INFO("Lendo QR Code");
-
-        }  
-    
-    
-        image.set_data(NULL, 0);
         
+        try {
+            // Procura os Qrcode na imagem  
+            int n = scanner.scan(image);
+            ROS_INFO("%d encontrados", n);
+
+            // Iterador para pecorrer todos os Qrcodes encontrado  
+            for(Image::SymbolIterator symbol = image.symbol_begin(); symbol != image.symbol_end(); ++symbol) {
+                pos = symbol->get_data();
+            }
+        
+            image.set_data(NULL, 0);
+
+        } catch (std::exception& e) {
+            ROS_ERROR("Erro na leitura do QR Code: %s", e.what());
+        }
+        
+        auto end = std::chrono::system_clock::now();
+
+        std::chrono::duration<double> elapsed = end - start;
+
+        // ROS_INFO("Tempo de processamento do QR Code: %lf", elapsed);
 
         return pos;
 
@@ -92,7 +105,9 @@ public:
             return;
         }
 
+
         string res = read_qrcode(cv_ptr->image);
+
         std::stringstream img_info;
         img_info << "Resultado: " << res;
 
@@ -102,17 +117,13 @@ public:
         cv::imshow("Drone image", cv_ptr->image);
         cv::waitKey(50);
 
-        pubResult(res);
-    }
-
-    // Publica o resultado da leitura do QR Code
-    void pubResult(string res) {
-        std_msgs::String resMsg;
-        resMsg.data = res;
+        resMsg.data = res.c_str();
         resPub.publish(resMsg);
 
+        ros::spinOnce();
+
         // Mostra o resultado no terminal para fins de monitoramente
-        // ROS_INFO("Resultado da leitura: %s", resMsg.data.c_str());
+        ROS_INFO("Pubicando %s", res.c_str());
     }
 
     // Construtor que inicia os Publishers e Subscribers necessários
@@ -136,8 +147,7 @@ int main(int argc, char **argv) {
     // Cria o objeto, o que desencadeia o que está no construtor
     CodeReader codeReader;
     
-    // Frequencia do node como 0.1 para dar tempo de processar a imagem
-    ros::Rate loopRate(0.1);
+    ros::Rate loopRate(10);
     
     // O nó entra no loop de execução
     while(ros::ok()) {

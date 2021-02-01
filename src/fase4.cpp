@@ -43,8 +43,8 @@ private:
 
 public:
     // Lista de posições das plataformas: A = [0]; B = [1]; C = [2]; D = [3]; E = [4]
-    const double positions[NUM_PLATAFORMAS][3] = {{4.1, -2.1, 0.4}, {5.0, -1.0, 0.4}, {6.0, -0.5, 0.4}, 
-    {3.2, -0.15, 1.0}, {0.0, -5.75, 1.0}};
+    const double positions[NUM_PLATAFORMAS][3] = {{4.1, -1.95, 0.25}, {5.125, -1.0, 0.25}, 
+    {6.11, -0.075, 0.25}, {3.2, -0.15, 2.2}, {0.0, -5.75, 2.2}};
 
     Control() {
         point_pub = n.advertise<geometry_msgs::Point>("/goto_point", 100);
@@ -53,13 +53,18 @@ public:
         code_result_sub = n.subscribe("/qrcode_result", 1000, &Control::qr_code_callback, this);
     }
 
+    ~Control() {
+        ros::shutdown();
+    }
+
     void position_callback(const mrs_msgs::PositionCommand::ConstPtr& msg){
         posicao = msg->position;
     }
 
     void qr_code_callback(const std_msgs::String::ConstPtr& msg) {
-        res_leitura = atoi(msg->data.c_str()) - 'A';
-        ROS_INFO("Resultado da leitura recebido: %d", res_leitura);
+        std::string temp = msg->data;
+        ROS_INFO("Resultado da leitura recebido: %s", temp);
+        res_leitura = temp[0] - 'D' + 6;
     }
 
     void publish_point(geometry_msgs::Point point) {
@@ -94,13 +99,12 @@ public:
         if(attachClient.call(srv)) {
             ROS_INFO("Attached UAV and equipment");
 
-            //vai pra caixa que o qrcode mandar
-        } else {
-            ROS_ERROR("Failed to attach UAV and equipment");
-            return 1;
-        }
-
-        return 0;
+            return 0;
+        } 
+        
+        ROS_ERROR("Failed to attach UAV and equipment");
+        return 1;
+        
     }
 
     int detach(std::string model2, std::string model2Link) {
@@ -151,15 +155,27 @@ int main(int argc, char **argv){
             loopRate.sleep();
         }
 
-        while((prox_ponto = control.get_res_leitura()) < 0)
+        ROS_INFO("Alcancou ponto para leitura");
+
+        while((prox_ponto = control.get_res_leitura()) < 0) {
+            ROS_INFO("Proximo ponto: %d", prox_ponto);
             continue;
+        }
+
+        ROS_INFO("Terminou a leitura");
 
         point.x = control.positions[prox_ponto][0];
         point.y = control.positions[prox_ponto][1];
         point.z = control.positions[prox_ponto][2];
 
+        // point.x = control.positions[4][0];        
+        // point.y = control.positions[4][1];      
+        // point.z = control.positions[4][2];        
+        while(control.attach(caixas[i], caixas_link[i]))
+            continue;
 
-        control.attach(caixas[i], caixas_link[i]);
+
+        ROS_INFO("Prosseguindo para soltar a caixa");
 
         while(!control.in_position(point)) {
             control.publish_point(point);
@@ -170,6 +186,8 @@ int main(int argc, char **argv){
         }
 
         control.detach(caixas[i], caixas_link[i]);
+
+        ROS_INFO("Caixa entregue");
 
     }
 

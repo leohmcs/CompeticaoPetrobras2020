@@ -88,7 +88,6 @@ public:
 
     void next_point(const geometry_msgs::Point::ConstPtr& destino) {
         geometry_msgs::Point intermediate;
-        ROS_INFO("Comparando %f e %f", posicao.z, destino->z);
         if(posicao.z < destino->z) {
             /* O destino está mais alto, então deve subir antes */
             // ROS_INFO("Subindo primeiro: [z atual: %f z do destino%f]\n", posicao.z, destino->z);
